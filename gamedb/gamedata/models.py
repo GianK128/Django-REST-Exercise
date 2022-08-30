@@ -7,7 +7,7 @@ class Genre(models.Model):
         Modelo que representa un género para uno o más videojuegos
     """
     name = models.CharField(max_length=30, unique=True)
-    description = models.CharField(180)
+    description = models.CharField(max_length=180)
     created_at = models.DateTimeField(default=datetime.utcnow())
     updated_at = models.DateTimeField(default=datetime.utcnow())
     
@@ -15,7 +15,7 @@ class Genre(models.Model):
         db_table = 'genres'
         ordering = ['name']
         indexes = [
-            models.Index(fields=['name'], name='name_idx')
+            models.Index(fields=['name'], name='genre_name_idx')
         ]
 
 class Publisher(models.Model):
@@ -40,7 +40,7 @@ class Platform(models.Model):
         uno o mas juegos
     """
     name = models.CharField(max_length=30, unique=True)
-    manufacturer = models.CharField(60)
+    manufacturer = models.CharField(max_length=60)
     created_at = models.DateTimeField(default=datetime.utcnow())
     updated_at = models.DateTimeField(default=datetime.utcnow())
 
@@ -48,7 +48,7 @@ class Platform(models.Model):
         db_table = 'platforms'
         ordering = ['name']
         indexes = [
-            models.Index(fields=['name'], name='name_idx')
+            models.Index(fields=['name'], name='platform_name_idx')
         ]
 
 class VideoGame(models.Model):
@@ -59,7 +59,7 @@ class VideoGame(models.Model):
     name = models.CharField(max_length=60)
     published_year = models.DateField()
     genres = models.ManyToManyField(Genre, related_name='games', null=True, blank=True)
-    publisher = models.ForeignKey(Publisher, related_name='games', null=True, blank=True)
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, related_name='games', null=True, blank=True)
     platform = models.ManyToManyField(Platform, related_name='games', null=True, blank=True)
     created_at = models.DateTimeField(default=datetime.utcnow())
     updated_at = models.DateTimeField(default=datetime.utcnow())
@@ -69,5 +69,5 @@ class VideoGame(models.Model):
         ordering = ['name']
         indexes = [
             models.Index(fields=['published_year'], name='pub_year_idx'),
-            models.Index(fields=['name'], name='name_idx')
+            models.Index(fields=['name'], name='videogame_name_idx')
         ]
