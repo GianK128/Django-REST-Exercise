@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 
 # Create your models here.
 class Genre(models.Model):
@@ -8,8 +7,11 @@ class Genre(models.Model):
     """
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=180)
-    created_at = models.DateTimeField(default=datetime.utcnow())
-    updated_at = models.DateTimeField(default=datetime.utcnow())
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return f"{self.id} - {self.name}"
     
     class Meta:
         db_table = 'genres'
@@ -24,8 +26,11 @@ class Publisher(models.Model):
     """
     trade_name = models.CharField(max_length=60, unique=True)
     founded = models.DateField()
-    created_at = models.DateTimeField(default=datetime.utcnow())
-    updated_at = models.DateTimeField(default=datetime.utcnow())
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"{self.id} - {self.trade_name}"
 
     class Meta:
         db_table = 'publishers'
@@ -41,8 +46,11 @@ class Platform(models.Model):
     """
     name = models.CharField(max_length=30, unique=True)
     manufacturer = models.CharField(max_length=60)
-    created_at = models.DateTimeField(default=datetime.utcnow())
-    updated_at = models.DateTimeField(default=datetime.utcnow())
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"{self.id} - {self.name}"
 
     class Meta:
         db_table = 'platforms'
@@ -61,9 +69,12 @@ class VideoGame(models.Model):
     genres = models.ManyToManyField(Genre, related_name='games', null=True, blank=True)
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, related_name='games', null=True, blank=True)
     platform = models.ManyToManyField(Platform, related_name='games', null=True, blank=True)
-    created_at = models.DateTimeField(default=datetime.utcnow())
-    updated_at = models.DateTimeField(default=datetime.utcnow())
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self) -> str:
+        return f"{self.id} - {self.name}"
+    
     class Meta:
         db_table = 'videogames'
         ordering = ['name']
